@@ -1,13 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { text } from "stream/consumers";
 import Link from "next/link";
+import { getContactData } from "@/api/api_contact";
+import { useQuery } from "react-query";
 
 const Contact = () => {
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["getApiContact"],
+    queryFn: async () => getContactData(),
+  });
+  useEffect(() => {
+  }, [data]);
+
 
   // const handleSubmit = (e) => {
   //   e.preventDefault();
@@ -23,13 +33,13 @@ const Contact = () => {
         <div className=" container mx-auto px-6 md:px-[5.5rem] lg:px-[9.2rem] xl:px-[9.3rem] 3xl:px-[22.5rem] pt-16 md:pt-12 xl:pt-36 3xl:pt-20 md:pb-28 xl:pb-32 ">
           <div className="flex flex-col 3xl:p-4 xl:pb-8 3xl:pb-32 leading-normal">
             <h5 className="mb-2 font-size-sm-[40]  md:font-size-[72] text-center font-bold tracking-wider text-pink-600">
-              Contact
+            {data?.result.data.attributes.title}
             </h5>
             <p className=" hidden md:block font-normal font-size-sm-[24]  md:font-size-[32] text-white text-center">
-              Et has minim elitr intellegat. Mea aeterno eleifend antiopam
+            {data?.result.data.attributes.sub_title}
             </p>
             <p className=" md:hidden font-normal font-size-sm-[24]  md:font-size-[32] text-white text-center">
-              Et has minim elitr intellegat. Mea aeterno
+            {data?.result.data.attributes.sub_title}
             </p>
           </div>
           <div className=" pt-6 md:pt-12 3xl:pt-0 grid md:grid-cols-2 gap-10">
@@ -38,23 +48,23 @@ const Contact = () => {
                 ที่อยู่
               </h2>
               <p className="text-gray-400 tracking-wider md:tracking-normal font-size-sm-[24] md:font-size-[32] leading-3">
-                Email : admissions@spi.ac.th
+                Email : {data?.result.data.attributes.email}
               </p>
               <p className="text-gray-400 tracking-wider md:tracking-normal font-size-sm-[24] md:font-size-[32]">
-                Facebook : SPU Metavaerse
+                Facebook : {data?.result.data.attributes.facebook}
               </p>
               <p className="text-gray-400 tracking-wider md:tracking-normal font-size-sm-[24] md:font-size-[32] leading-3">
-                Line : @sripatum
+                Line : {data?.result.data.attributes.line}
               </p>
               <p className="text-gray-400 tracking-wider md:tracking-normal font-size-sm-[24] md:font-size-[32] pb-8 md:pb-5 xl:pb-10 3xl:pb-20">
-                Tel : 02-558-6888
+                Tel : {data?.result.data.attributes.tel}
               </p>
               <p className="text-gray-400 tracking-wider md:tracking-normal font-size-sm-[24] md:font-size-[32]">
-                มหาวิทยาลัยศรีปทุม 2410/2 ถ.พหลโยธิน
+              {data?.result.data.attributes.address}
               </p>
-              <p className="text-gray-400 tracking-wider md:tracking-normal font-size-sm-[24] md:font-size-[32] leading-5">
+              {/* <p className="text-gray-400 tracking-wider md:tracking-normal font-size-sm-[24] md:font-size-[32] leading-5">
                 เขต จตุจักร กรุงเทพฯ 10900
-              </p>
+              </p> */}
             </div>
 
             {/* form */}

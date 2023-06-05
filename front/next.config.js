@@ -6,8 +6,16 @@ const nextConfig = {
     includePaths: [path.join(__dirname, "styles")],
   },
   images: {
-    domains: ["spu-strapi.apptr1.com"],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'spu-strapi.apptr1.com',
+      },
+    ],
   },
+  // images: {
+  //   domains: ["spu-strapi.apptr1.com"],
+  // },
 
   env: {
     STRAPI_API_BASE_URL: "https://spu-strapi.apptr1.com",

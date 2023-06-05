@@ -1,8 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+interface Dataset {
+  id: number;
+  attributes: {
+    header: string;
+    description: string;
+    date: string;
+    image: {
+      data: {
+        id: number;
+        attributes: {
+          url: string;
+        };
+      };
+    };
+  };
+}
+
 const News = () => {
+  const [dataList, setDataList] = useState<Dataset[]>([]);
+  const API_KEY = process.env.STRAPI_API_KEY;
+  const API_BASE = process.env.STRAPI_API_BASE_URL;
+
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ["getApiNews"],
+  //   queryFn: async () => getNewsData(),
+  // });
+  // useEffect(() => {
+  // }, [data]);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/news/?populate=*`, {
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => setDataList(result.data));
+  }, [[]]);
   return (
     <>
       <div id="News" className="bg-container">
@@ -16,8 +53,52 @@ const News = () => {
             </p>
           </div>
           <div className="grid grid-cols-1 md:px-[0px] md:grid-cols-3 gap-6 md:gap-4 3xl:gap-6 xl:pb-8 3xl:pb-4">
+          {dataList.slice(0, 6).map((data: Dataset) => (
+            <>
+              {/* <!-- Card image --> */}
+              <Link href={'/blogs/'+ data.id}>
+              <div className="relative">
+                <div className="relative rounded-3xl w-auto justify-center bg-gradient-to-br from-sky-600 to-pink-600  ">
+                  <div className="absolute text-xl  top-2 left-2 3xl:top-4 3xl:left-4">
+                    <span className=" absolute w-8 h-8 md:w-6 md:h-6 lg:w-8 lg:h-8  3xl:w-12 3xl:h-12 rounded-full flex items-center justify-center bg-gradient-to-r from-pink-700 to-pink-600 ring-1 ring-slate-900/5 shadow-lg cursor-pointer">
+                      <Image
+                        className=" md:w-[15px] md:h-[15px] lg:w-[20px] lg:h-[20px] "
+                        src="/image/ping_highlight.png"
+                        alt="me"
+                        width="20"
+                        height="20"
+                      />
+                    </span>
+                    <i className="fa fa-heart text-white hover:text-red-light ml-4 mt-4 cursor-pointer"></i>
+                  </div>
+                  <picture>
+                      <img
+                        className=" w-full rounded-3xl h-[200px] md:h-[120px] lg:h-[160px] xl:h-[220px] 3xl:h-[250px]"
+                        src={`${API_BASE}${data.attributes.image.data.attributes.url}`}
+                        alt="me"
+                        width="100"
+                        height="100"
+                        sizes="(max-width: 425px) 33vw,(max-width: 640px) 50vw, (max-width: 768px) 50vw, 33vw"
+                      />
+                    </picture>
+                </div>
+              </div>
+              <div className=" py-6 md:py-8 3xl:py-10 max-sm:text-center ">
+                <div className="font-bold text-black -tracking-tighter font-size-sm-[32] md:font-size-[40] ">
+                {data.attributes.header}
+                </div>
+                <div className=" font-semibold text-black md:text-pink-600 font-size-sm-[24] md:font-size-[32] pb-2 ">
+                {data.attributes.date}
+                </div>
+                <p className=" text-gray-600 leading-8 font-normal  font-size-sm-[24] md:font-size-[32]">
+                {data.attributes.description}
+                </p>
+              </div>
+            </Link>
+            </>
+          ))}
             {/* <!-- Card image --> */}
-            <Link href="/">
+            {/* <Link href="/">
               <div className="relative">
                 <div className="relative rounded-3xl w-auto justify-center bg-gradient-to-br from-sky-600 to-pink-600  ">
                   <div className="absolute text-xl top-2 left-2 3xl:top-4 3xl:left-4">
@@ -54,9 +135,9 @@ const News = () => {
                   ad, nam
                 </p>
               </div>
-            </Link>
+            </Link> */}
             {/* <!-- Card image 2--> */}
-            <Link href="/">
+            {/* <Link href="/">
               <div className="relative">
                 <div className="relative rounded-3xl w-auto justify-center bg-gradient-to-br from-sky-600 to-pink-500  ">
                   <div className="absolute text-xl top-2 left-2 3xl:top-4 3xl:left-4">
@@ -93,9 +174,9 @@ const News = () => {
                   ad, nam
                 </p>
               </div>
-            </Link>
+            </Link> */}
             {/* <!-- Card image 3--> */}
-            <Link href="/Blogs">
+            {/* <Link href="/Blogs">
               <div className="relative">
                 <div className="relative rounded-3xl w-auto justify-center bg-gradient-to-br from-sky-600 to-pink-500  ">
                   <div className="absolute text-xl top-2 left-2 3xl:top-4 3xl:left-4">
@@ -132,10 +213,10 @@ const News = () => {
                   ad, nam
                 </p>
               </div>
-            </Link>
+            </Link> */}
 
             {/* <!-- Card image --> */}
-            <Link href="/">
+            {/* <Link href="/">
               <div className="relative">
                 <div className="relative rounded-3xl w-auto justify-center bg-gradient-to-br from-sky-600 to-pink-600  ">
                   <div className="absolute text-xl top-2 left-2 3xl:top-4 3xl:left-4">
@@ -172,9 +253,9 @@ const News = () => {
                   ad, nam
                 </p>
               </div>
-            </Link>
+            </Link> */}
             {/* <!-- Card image 2--> */}
-            <Link href="/">
+            {/* <Link href="/">
               <div className="relative">
                 <div className="relative rounded-3xl w-auto justify-center bg-gradient-to-br from-sky-600 to-pink-500  ">
                   <div className="absolute text-xl top-2 left-2 3xl:top-4 3xl:left-4">
@@ -211,9 +292,9 @@ const News = () => {
                   ad, nam
                 </p>
               </div>
-            </Link>
+            </Link> */}
             {/* <!-- Card image 3--> */}
-            <Link href="/Blogs">
+            {/* <Link href="/Blogs">
               <div className="relative">
                 <div className="relative rounded-3xl w-auto justify-center bg-gradient-to-br from-sky-600 to-pink-500  ">
                   <div className="absolute text-xl top-2 left-2 3xl:top-4 3xl:left-4">
@@ -250,7 +331,7 @@ const News = () => {
                   ad, nam
                 </p>
               </div>
-            </Link>
+            </Link> */}
           </div>
           <div className="pt-20 pb-12 md:pb-0 md:pt-0 lg:pt-40 flex justify-center">
             <nav aria-label="Page navigation example">
